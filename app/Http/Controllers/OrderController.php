@@ -14,6 +14,10 @@ class OrderController extends Controller
     {
         $order = Order::create($request->validated());
 
+        foreach ($request->validated('items', []) as $product) {
+            $order->items()->create($product);
+        }
+
         return response()->json(new OrderResource($order), Response::HTTP_OK);
     }
 }

@@ -13,6 +13,9 @@ class Order extends Model
 
     public $incrementing = false;
 
+    /**
+     * The attributes that should be fillable.
+     */
     protected $fillable = [
         'id',
         'created_at',
@@ -29,10 +32,16 @@ class Order extends Model
         'currency_code',
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     */
     protected $casts = [
         'created_at' => 'datetime',
     ];
 
+    /**
+     * The header map for mapping CSV columns to model attributes.
+     */
     public static array $headerMap = [
         'ID' => 'id',
         'Created (ext)' => 'created_at',
@@ -49,7 +58,7 @@ class Order extends Model
     /**
      * Get the products associated with the order.
      */
-    public function products(): HasMany
+    public function items(): HasMany
     {
         return $this->hasMany(Product::class);
     }

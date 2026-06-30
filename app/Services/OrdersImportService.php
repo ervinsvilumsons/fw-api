@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Support\Facades\Http;
 use Log;
 
@@ -18,13 +19,14 @@ class OrdersImportService
     public function import(string $filePath): void
     {
         $file = fopen($filePath, 'r');
-
-        $headers = $this->mapHeaders(fgetcsv($file));
+        $rawHeaders = fgetcsv($file);
+        $headers = $this->mapHeaders($rawHeaders);
 
         while (($row = fgetcsv($file)) !== false) {
             $data = array_combine($headers, $row);
 
             $this->mapAddress($data);
+            $this->mapProducts($data);
             $this->sendToApi($data);
         }
 
@@ -35,11 +37,11 @@ class OrdersImportService
     /**
      * Map the CSV headers to the order model attributes.
      */
-    public function mapHeaders(array $headers): array
+    public function mapHeaders(array $rawHeaders): array
     {
         return array_map(
-            fn ($h) => Order::$headerMap[$h] ?? $h,
-            $headers,
+            fn ($h) => array_merge(Order::$headerMap, Product::$headerMap)[$h] ?? $h,
+            $rawHeaders,
         );
     }
 
@@ -76,6 +78,49 @@ class OrdersImportService
         $data['city'] = $city;
         $data['state'] = $state;
         $data['zip'] = $zip;
+    }
+
+    /**
+     * Map the items field to the order model attributes.
+     */
+    public function mapProducts(array &$data): void
+    {
+        $names = array_filter(array_map('trim', explode(',', $data['variation_names'] ?? '')));
+        $values = array_filter(array_map('trim', explode(',', $data['variation_values'] ?? '')));
+        $variations = [];
+
+        foreach ($names as $i => $name) {
+            if (!isset($values[$i])) continue;
+
+            $variations[] = [
+                'name' => $name,
+                'value' => $values[$i],
+            ];
+        }
+
+        $data['items'] = [
+            [
+                'id' => $data['product_id'] ?? null,
+                'sku' => $data['sku'] ?? null,
+                'title' => $data['title'] ?? null,
+                'image' => $data['image'] ?? null,
+                'quantity' => isset($data['quantity']) ? (int) $data['quantity'] : null,
+                'price' => isset($data['price']) ? (float) $data['price'] : null,
+                'variations' => $variations ?? null,
+            ]
+        ];
+
+        unset(
+            $data['product_id'], 
+            $data['sku'], 
+            $data['title'], 
+            $data['image'], 
+            $data['quantity'], 
+            $data['price'], 
+            $data['variations'], 
+            $data['variation_names'], 
+            $data['variation_values'],
+        );
     }
 
     /**

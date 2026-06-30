@@ -84,10 +84,49 @@ class StoreOrderRequest extends FormRequest
                 'required',
                 Rule::in(Currencies::getCurrencyCodes()),
             ],
-            // 'items' => [
-            //     'required',
-            //     'array',
-            // ],
+            'items' => [
+                'required',
+                'array',
+            ],
+            'items.*.id' => [
+                'required',
+                'string',
+                'unique:products,id',
+            ],
+            'items.*.sku' => [
+                'nullable',
+                'string',
+            ],
+            'items.*.title' => [
+                'required',
+                'string',
+            ],
+            'items.*.image' => [
+                'nullable',
+                'string',
+            ],
+            'items.*.quantity' => [
+                'required',
+                'integer',
+                'min:1',
+            ],
+            'items.*.price' => [
+                'required',
+                'numeric',
+                'min:0',
+            ],
+            'items.*.variations' => [
+                'nullable',
+                'array',
+            ],
+            'items.*.variations.*.name' => [
+                'required',
+                'string',
+            ],
+            'items.*.variations.*.value' => [
+                'required',
+                'string',
+            ],
         ];
     }
 
