@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\CountryCode;
-use App\Rules\CurrencyCode;
+use Carbon\Carbon;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Currencies;
 
 class StoreOrderRequest extends FormRequest
 {
@@ -27,12 +29,13 @@ class StoreOrderRequest extends FormRequest
         return [
             'id' => [
                 'required',
+                'unique:orders,id',
                 'string',
                 'max:20',
             ],
             'created_at' => [
                 'required',
-                'date_format:d/m/Y  H:i:s',
+                'date',
             ],
             'phone_number' => [
                 'required',
@@ -42,7 +45,7 @@ class StoreOrderRequest extends FormRequest
             'country_iso_code' => [
                 'required',
                 'string',
-                new CountryCode,
+                Rule::in(Countries::getCountryCodes()),
             ],
             'email' => [
                 'required',
@@ -59,12 +62,22 @@ class StoreOrderRequest extends FormRequest
             ],
             'currency_code' => [
                 'required',
-                new CurrencyCode,
+                Rule::in(Currencies::getCurrencyCodes()),
             ],
             // 'items' => [
             //     'required',
             //     'array',
             // ],
         ];
+    }
+
+    /**
+     * Handle a passed validation attempt.
+     */
+    protected function passedValidation(): void
+    {
+        $this->merge([
+            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
+        ]);
     }
 }
