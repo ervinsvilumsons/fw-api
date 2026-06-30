@@ -2,8 +2,8 @@ FROM php:8.5-fpm
 
 RUN apt-get update && apt-get install -y \
     netcat-openbsd \
-    zip unzip curl git libpng-dev libonig-dev libxml2-dev libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql mbstring xml zip exif pcntl bcmath gd \
+    zip unzip curl git libpng-dev libonig-dev libxml2-dev libzip-dev libicu-dev \
+    && docker-php-ext-install pdo pdo_mysql mbstring xml zip exif pcntl bcmath gd intl \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug \
     && echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
