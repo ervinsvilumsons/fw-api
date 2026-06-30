@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'import' => [
+        'url' => env('IMPORT_API_URL', 'http://localhost:9006/api/v1/orders'),
+    ],
+
 ];

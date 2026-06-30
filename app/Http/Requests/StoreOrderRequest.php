@@ -55,10 +55,30 @@ class StoreOrderRequest extends FormRequest
                 'required',
                 'string',
             ],
+            'first_line' => [
+                'nullable',
+                'string',
+            ],
+            'second_line' => [
+                'nullable',
+                'string',
+            ],
+            'city' => [
+                'nullable',
+                'string',
+            ],
+            'state' => [
+                'nullable',
+                'string',
+            ],
             'zip' => [
                 'required',
                 'string',
                 'max:20',
+            ],
+            'message' => [
+                'nullable',
+                'string',
             ],
             'currency_code' => [
                 'required',

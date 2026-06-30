@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
-use App\Models\Order;
 use App\Http\Resources\OrderResource;
+use App\Models\Order;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 

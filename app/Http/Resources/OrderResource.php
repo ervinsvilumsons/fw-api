@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\ProductResource;
 use Illuminate\Http\Resources\JsonApi\JsonApiResource;
 
 class OrderResource extends JsonApiResource
