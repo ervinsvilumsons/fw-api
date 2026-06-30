@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: workspace
+    working_dir: /var/www/html
+    environment:
+      DB_CONNECTION: sqlite     
+    volumes:
+      - .:/var/www/html
+    networks:
+      - laravel
+  
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - "9006:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - laravel
+
+networks:
+  laravel:
