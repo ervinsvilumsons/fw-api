@@ -23,6 +23,13 @@ class OrdersImportService
         $headers = $this->mapHeaders($rawHeaders);
 
         while (($row = fgetcsv($file)) !== false) {
+            $row = is_array($row) ? $row : [];
+            $row = array_pad($row, count($headers), null);
+
+            if (count($row) > count($headers)) {
+                $row = array_slice($row, 0, count($headers));
+            }
+
             $data = array_combine($headers, $row);
 
             $this->mapAddress($data);
