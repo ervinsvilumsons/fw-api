@@ -21,8 +21,6 @@ COPY . .
 
 RUN php artisan package:discover --ansi
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
 RUN php artisan key:generate
 
 RUN php artisan scribe:generate

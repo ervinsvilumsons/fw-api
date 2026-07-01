@@ -9,6 +9,8 @@ services:
       DB_CONNECTION: sqlite     
     volumes:
       - .:/var/www/html
+      - storage:/var/www/html/storage
+      - cache:/var/www/html/bootstrap/cache
     networks:
       - laravel
   
@@ -27,3 +29,7 @@ services:
 
 networks:
   laravel:
+
+volumes:
+  storage:
+  cache:

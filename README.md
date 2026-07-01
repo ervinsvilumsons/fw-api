@@ -22,13 +22,18 @@ This repository provides:
 
 ## Requirements
 
+- PHP 8.3
+- Composer
 - Docker
 
 ## Setup
 
 ```bash
 git clone https://github.com/ervinsvilumsons/fw-api.git
+cd fw-api
+composer install
 cp .env.dev .env
+cp orders-sample.csv storage/app/private/orders-sample.csv
 ```
 
 ## Run the application
