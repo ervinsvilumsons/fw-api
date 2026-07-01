@@ -10,13 +10,13 @@ class OrdersImportServiceTest extends TestCase
 {
     public function test_import_maps_csv_row_and_posts_to_api(): void
     {
-        $service = new OrdersImportService();
+        $service = new OrdersImportService;
         $file = tempnam(sys_get_temp_dir(), 'orders');
 
         $csv = implode(PHP_EOL, [
             'ID,Created (ext),Phone,Country code,Buyer email,Name,Message,Currency code,Full Address,Products,SKU,Sheet(s),Grand total,Material,Size',
             'order-200,2026-06-30T11:00:00Z,+37122334455,LV,buyer@example.com,Jane Doe,Handle with care,EUR,"Main Street 1, Riga, LV-1010",Canvas Print,SKU-002,2,19.95,Material,Size',
-        ]) . PHP_EOL;
+        ]).PHP_EOL;
 
         file_put_contents($file, $csv);
 
@@ -40,7 +40,7 @@ class OrdersImportServiceTest extends TestCase
 
     public function test_import_maps_address_parts_for_non_us_country(): void
     {
-        $service = new OrdersImportService();
+        $service = new OrdersImportService;
         $data = [
             'address' => 'Main Street 1, Riga, LV-1010',
             'country_iso_code' => 'LV',

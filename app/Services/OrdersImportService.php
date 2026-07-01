@@ -97,7 +97,9 @@ class OrdersImportService
         $variations = [];
 
         foreach ($names as $i => $name) {
-            if (!isset($values[$i])) continue;
+            if (! isset($values[$i])) {
+                continue;
+            }
 
             $variations[] = [
                 'name' => $name,
@@ -105,6 +107,7 @@ class OrdersImportService
             ];
         }
 
+        // @TODO Handle multiple items in a single order if the CSV format allows for it.
         $data['items'] = [
             [
                 'id' => $data['product_id'] ?? null,
@@ -114,18 +117,18 @@ class OrdersImportService
                 'quantity' => isset($data['quantity']) ? (int) $data['quantity'] : null,
                 'price' => isset($data['price']) ? (float) $data['price'] : null,
                 'variations' => $variations ?? null,
-            ]
+            ],
         ];
 
         unset(
-            $data['product_id'], 
-            $data['sku'], 
-            $data['title'], 
-            $data['image'], 
-            $data['quantity'], 
-            $data['price'], 
-            $data['variations'], 
-            $data['variation_names'], 
+            $data['product_id'],
+            $data['sku'],
+            $data['title'],
+            $data['image'],
+            $data['quantity'],
+            $data['price'],
+            $data['variations'],
+            $data['variation_names'],
             $data['variation_values'],
         );
     }

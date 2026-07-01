@@ -13,10 +13,7 @@ class OrderController extends Controller
     public function store(StoreOrderRequest $request): JsonResponse
     {
         $order = Order::create($request->validated());
-
-        foreach ($request->validated('items', []) as $product) {
-            $order->items()->create($product);
-        }
+        $order->items()->createMany($request->validated('items', []));
 
         return response()->json(new OrderResource($order), Response::HTTP_OK);
     }
